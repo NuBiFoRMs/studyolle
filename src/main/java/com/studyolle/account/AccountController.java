@@ -20,7 +20,7 @@ public class AccountController {
 
     private final SignUpFormValidator signUpFormValidator;
     private final AccountService accountService;
-    private final AccountRepository accountRepository
+    private final AccountRepository accountRepository;
 
     @InitBinder("signUpForm")
     public void initBinder(WebDataBinder webDataBinder) {
@@ -53,7 +53,7 @@ public class AccountController {
             return view;
         }
 
-        if (account.getEmailCheckToken().equals(token)) {
+        if (!account.getEmailCheckToken().equals(token)) {
             model.addAttribute("error", "wrong.email");
             return view;
         }
