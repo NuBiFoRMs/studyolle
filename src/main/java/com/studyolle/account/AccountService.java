@@ -20,8 +20,6 @@ public class AccountService {
     private final AccountRepository accountRepository;
     private final JavaMailSender javaMailSender;
     private final PasswordEncoder passwordEncoder;
-//    정석대로
-//    private final AuthenticationManager authenticationManager;
 
     @Transactional
     public Account processNewAccount(SignUpForm signUpForm) {
