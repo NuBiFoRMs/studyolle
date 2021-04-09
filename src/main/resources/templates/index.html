@@ -32,17 +32,17 @@
         </ul>
 
         <ul class="navbar-nav justify-content-end">
-            <li class="nav-item" sec:authentication="!isAuthenticated()">
+            <li class="nav-item" sec:authorize="!isAuthenticated()">
                 <a class="nav-link" th:href="@{/login}">로그인</a>
             </li>
-            <li class="nav-item" sec:authentication="!isAuthenticated()">
+            <li class="nav-item" sec:authorize="!isAuthenticated()">
                 <a class="nav-link" th:href="@{/sign-up}">가입</a>
             </li>
-            <li class="nav-item" sec:authentication="isAuthenticated()">
+            <li class="nav-item" sec:authorize="isAuthenticated()">
                 <a class="nav-link" th:href="@{/notifications}">알림</a>
             </li>
-            <li class="nav-item" sec:authentication="isAuthenticated()">
-                <a class="nav-link btn btn-outline-primary" th:href="@{/notifications}">스터디 개</a>
+            <li class="nav-item" sec:authorize="isAuthenticated()">
+                <a class="nav-link btn btn-outline-primary" th:href="@{/notifications}">스터디 개설</a>
             </li>
             <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
                 <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
