@@ -78,6 +78,8 @@ public class AccountController {
             model.addAttribute("email", account.getEmail());
             return "account/check-email";
         }
+
+        accountService.sendSignUpConfirmEmail(account);
         return "redirect:/";
     }
 }
