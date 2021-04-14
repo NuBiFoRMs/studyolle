@@ -17,8 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @RequiredArgsConstructor
-@Service
 @Transactional
+@Service
 public class AccountService implements UserDetailsService {
 
     private final AccountRepository accountRepository;
