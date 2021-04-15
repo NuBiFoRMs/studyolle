@@ -2,7 +2,9 @@ package com.studyolle.settings;
 
 import com.studyolle.domain.Account;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
 @Data
 public class Profile {
 
