@@ -1,6 +1,8 @@
 # N Study
 
 ![Tag](https://img.shields.io/github/v/tag/nubiforms/studyolle)
+![Travis](https://img.shields.io/travis/com/nubiforms/studyolle)
+
 ![Languages Count](https://img.shields.io/github/languages/count/nubiforms/studyolle)
 ![Languages Top](https://img.shields.io/github/languages/top/nubiforms/studyolle)
 ![Issues](https://img.shields.io/github/issues/nubiforms/studyolle)
