@@ -4,7 +4,9 @@
 ![Languages Count](https://img.shields.io/github/languages/count/nubiforms/studyolle)
 ![Languages Top](https://img.shields.io/github/languages/top/nubiforms/studyolle)
 ![Issues](https://img.shields.io/github/issues/nubiforms/studyolle)
-![Issues closed](https://img.shields.io/github/issues-closed/nubiforms/studyolle)
+![Issues Closed](https://img.shields.io/github/issues-closed/nubiforms/studyolle)
+![Issues PR](https://img.shields.io/github/issues-pr/nubiforms/studyolle)
+![Issues PR Closed](https://img.shields.io/github/issues-pr-closed/nubiforms/studyolle)
 ![Commit Activity](https://img.shields.io/github/commit-activity/w/nubiforms/studyolle)
 ![Last Commit](https://img.shields.io/github/last-commit/nubiforms/studyolle)
 
