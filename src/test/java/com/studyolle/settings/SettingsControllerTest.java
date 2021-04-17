@@ -13,6 +13,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -29,6 +30,17 @@ class SettingsControllerTest {
     @AfterEach
     void tearDown() {
         accountRepository.deleteAll();
+    }
+
+    @DisplayName("프로필 수정 폼")
+    @Test
+    @WithAccount("nickname")
+    void updateProfileForm() throws Exception {
+        String bio = "짧은 소개를 수정하는 경우.";
+        mockMvc.perform(get(SettingsController.SETTINGS_PROFILE_URL))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("account"))
+                .andExpect(model().attributeExists("profile"));
     }
 
     @DisplayName("프로필 수정하기 - 입력값 정상")
