@@ -43,7 +43,7 @@ class SettingsControllerTest {
                 .andExpect(redirectedUrl(SettingsController.SETTINGS_PROFILE_URL))
                 .andExpect(flash().attributeExists("message"));
 
-        Account account = accountRepository.findByNickname("username");
+        Account account = accountRepository.findByNickname("nickname");
         assertEquals(bio, account.getBio());
     }
 }
