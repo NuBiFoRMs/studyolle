@@ -46,4 +46,22 @@ class SettingsControllerTest {
         Account account = accountRepository.findByNickname("nickname");
         assertEquals(bio, account.getBio());
     }
+
+    @DisplayName("프로필 수정하기 - 입력값 오류")
+    @Test
+    @WithAccount("nickname")
+    void updateProfile_error() throws Exception {
+        String bio = "짧은 소개를 수정하는 경우.";
+        mockMvc.perform(post(SettingsController.SETTINGS_PROFILE_URL)
+                .param("bio", bio)
+                .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(view().name(SettingsController.SETTINGS_PROFILE_VIEW_NAME))
+                .andExpect(model().attributeExists("account"))
+                .andExpect(model().attributeExists("profile"))
+                .andExpect(model().hasErrors());
+
+        Account account = accountRepository.findByNickname("nickname");
+        assertNull(account.getBio());
+    }
 }
