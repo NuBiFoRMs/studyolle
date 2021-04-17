@@ -1,5 +1,17 @@
 # N Study
 
+![Tag](https://img.shields.io/github/v/tag/nubiforms/studyolle)
+![Travis](https://img.shields.io/travis/com/nubiforms/studyolle)
+
+![Languages Count](https://img.shields.io/github/languages/count/nubiforms/studyolle)
+![Languages Top](https://img.shields.io/github/languages/top/nubiforms/studyolle)
+![Issues](https://img.shields.io/github/issues/nubiforms/studyolle)
+![Issues Closed](https://img.shields.io/github/issues-closed/nubiforms/studyolle)
+![Issues PR](https://img.shields.io/github/issues-pr/nubiforms/studyolle)
+![Issues PR Closed](https://img.shields.io/github/issues-pr-closed/nubiforms/studyolle)
+![Commit Activity](https://img.shields.io/github/commit-activity/w/nubiforms/studyolle)
+![Last Commit](https://img.shields.io/github/last-commit/nubiforms/studyolle)
+
 Inflearn - 스프링과 JPA 기반 웹 애플리케이션 개발
 
 ## Version / 버전
