@@ -20,10 +20,13 @@ public class SettingsController {
     static final String SETTINGS_PROFILE_URL = "/settings/profile";
     static final String SETTINGS_PROFILE_VIEW_NAME = "settings/profile";
 
+    static final String SETTINGS_PASSWORD_URL = "/settings/password";
+    static final String SETTINGS_PASSWORD_VIEW_NAME = "settings/password";
+
     private final AccountService accountService;
 
     @GetMapping(SETTINGS_PROFILE_URL)
-    public String profileUpdateForm(@CurrentUser Account account, Model model) {
+    public String updateProfileForm(@CurrentUser Account account, Model model) {
         model.addAttribute(account);
         model.addAttribute(new Profile(account));
         return SETTINGS_PROFILE_VIEW_NAME;
@@ -40,5 +43,25 @@ public class SettingsController {
         accountService.updateProfile(account, profile);
         redirectAttributes.addFlashAttribute("message", "프로필을 수정했습니다.");
         return "redirect:" + SETTINGS_PROFILE_URL;
+    }
+
+    @GetMapping(SETTINGS_PROFILE_URL)
+    public String updatePasswordForm(@CurrentUser Account account, Model model) {
+        model.addAttribute(account);
+        model.addAttribute(new Profile(account));
+        return SETTINGS_PASSWORD_VIEW_NAME;
+    }
+
+    @PostMapping(SETTINGS_PASSWORD_URL)
+    public String updatePassword(@CurrentUser Account account, @Valid PasswordForm passwordForm, Errors errors,
+                                 Model model, RedirectAttributes redirectAttributes) {
+        if (errors.hasErrors()) {
+            model.addAttribute(account);
+            return SETTINGS_PASSWORD_VIEW_NAME;
+        }
+
+        accountService.updatePassword(account, passwordForm);
+        redirectAttributes.addFlashAttribute("message", "패스워드를 수정했습니다.");
+        return "redirect:" + SETTINGS_PASSWORD_URL;
     }
 }
