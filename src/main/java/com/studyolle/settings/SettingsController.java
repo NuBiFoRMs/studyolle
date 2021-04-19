@@ -2,12 +2,15 @@ package com.studyolle.settings;
 
 import com.studyolle.account.AccountService;
 import com.studyolle.account.CurrentUser;
+import com.studyolle.account.SignUpFormValidator;
 import com.studyolle.domain.Account;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -23,7 +26,13 @@ public class SettingsController {
     static final String SETTINGS_PASSWORD_URL = "/settings/password";
     static final String SETTINGS_PASSWORD_VIEW_NAME = "settings/password";
 
+    private final PasswordFormValidator passwordFormValidator;
     private final AccountService accountService;
+
+    @InitBinder("passwordForm")
+    public void initBinder(WebDataBinder webDataBinder) {
+        webDataBinder.addValidators(passwordFormValidator);
+    }
 
     @GetMapping(SETTINGS_PROFILE_URL)
     public String updateProfileForm(@CurrentUser Account account, Model model) {
@@ -61,7 +70,7 @@ public class SettingsController {
         }
 
         accountService.updatePassword(account, passwordForm);
-        redirectAttributes.addFlashAttribute("message", "패스워드를 수정했습니다.");
+        redirectAttributes.addFlashAttribute("message", "패스워드를 변경했습니다.");
         return "redirect:" + SETTINGS_PASSWORD_URL;
     }
 }
