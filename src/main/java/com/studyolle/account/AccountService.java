@@ -42,7 +42,7 @@ public class AccountService implements UserDetailsService {
                 .password(passwordEncoder.encode(signUpForm.getPassword())) // TODO encoding 해야함
                 .studyCreatedByWeb(true)
                 .studyEnrollmentResultByWeb(true)
-                .studyUpdateByWeb(true)
+                .studyUpdatedByWeb(true)
                 .build();
         Account newAccount = accountRepository.save(account);
         return newAccount;
