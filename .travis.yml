@@ -3,4 +3,4 @@ cache:
   directories:
   - .autoconf
   - $HOME/.m2
-script: mvn test
+script: mvn clean package
