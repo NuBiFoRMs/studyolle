@@ -82,7 +82,7 @@ public class AccountController {
     @GetMapping("/profile/{nickname}")
     public String viewProfile(@PathVariable String nickname, @CurrentUser Account account, Model model) {
         Account byNickname = accountRepository.findByNickname(nickname);
-        if (nickname == null) {
+        if (byNickname == null) {
             throw new IllegalArgumentException(nickname + "에 해당하는 사용자가 없습니다.");
         }
 
