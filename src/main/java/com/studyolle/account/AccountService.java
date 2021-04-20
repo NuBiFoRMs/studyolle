@@ -1,6 +1,7 @@
 package com.studyolle.account;
 
 import com.studyolle.domain.Account;
+import com.studyolle.settings.Notifications;
 import com.studyolle.settings.PasswordForm;
 import com.studyolle.settings.Profile;
 import lombok.RequiredArgsConstructor;
@@ -41,7 +42,7 @@ public class AccountService implements UserDetailsService {
                 .password(passwordEncoder.encode(signUpForm.getPassword())) // TODO encoding 해야함
                 .studyCreatedByWeb(true)
                 .studyEnrollmentResultByWeb(true)
-                .studyUpdateByWeb(true)
+                .studyUpdatedByWeb(true)
                 .build();
         Account newAccount = accountRepository.save(account);
         return newAccount;
@@ -100,6 +101,16 @@ public class AccountService implements UserDetailsService {
 
     public void updatePassword(Account account, PasswordForm passwordForm) {
         account.setPassword(passwordEncoder.encode(passwordForm.getNewPassword()));
+        accountRepository.save(account);
+    }
+
+    public void updateNotifications(Account account, Notifications notifications) {
+        account.setStudyCreatedByWeb(notifications.isStudyCreatedByWeb());
+        account.setStudyCreatedByEmail(notifications.isStudyCreatedByEmail());
+        account.setStudyUpdatedByWeb(notifications.isStudyUpdatedByWeb());
+        account.setStudyUpdatedByEmail(notifications.isStudyUpdatedByEmail());
+        account.setStudyEnrollmentResultByEmail(notifications.isStudyEnrollmentResultByEmail());
+        account.setStudyEnrollmentResultByWeb(notifications.isStudyEnrollmentResultByWeb());
         accountRepository.save(account);
     }
 }
