@@ -1,5 +1,6 @@
 package com.studyolle.account;
 
+import com.studyolle.account.form.SignUpForm;
 import com.studyolle.domain.Account;
 import com.studyolle.settings.form.Notifications;
 import com.studyolle.settings.form.PasswordForm;
