@@ -57,7 +57,7 @@ public class SettingsController {
     @GetMapping(SETTINGS_PASSWORD_URL)
     public String updatePasswordForm(@CurrentUser Account account, Model model) {
         model.addAttribute(account);
-        model.addAttribute(new Profile(account));
+        model.addAttribute(new PasswordForm());
         return SETTINGS_PASSWORD_VIEW_NAME;
     }
 
