@@ -1,0 +1,16 @@
+spring:
+  profiles:
+    active: local
+  jpa:
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: true
+server:
+  servlet:
+    session:
+      timeout: 30m
+
+logging:
+  level:
+    com.studyolle: debug
