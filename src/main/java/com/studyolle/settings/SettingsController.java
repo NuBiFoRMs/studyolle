@@ -3,9 +3,11 @@ package com.studyolle.settings;
 import com.studyolle.account.AccountService;
 import com.studyolle.account.CurrentUser;
 import com.studyolle.domain.Account;
+import com.studyolle.settings.form.NicknameForm;
 import com.studyolle.settings.form.Notifications;
 import com.studyolle.settings.form.PasswordForm;
 import com.studyolle.settings.form.Profile;
+import com.studyolle.settings.validator.NickNameFormValidator;
 import com.studyolle.settings.validator.PasswordFormValidator;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -35,6 +37,9 @@ public class SettingsController {
 
     static final String SETTINGS_ACCOUNT_URL = "/settings/account";
     static final String SETTINGS_ACCOUNT_VIEW_NAME = "settings/account";
+
+    static final String SETTINGS_TAGS_URL = "/settings/tags";
+    static final String SETTINGS_TAGS_VIEW_NAME = "settings/tags";
 
     private final PasswordFormValidator passwordFormValidator;
     private final NickNameFormValidator nickNameFormValidator;
@@ -129,5 +134,11 @@ public class SettingsController {
         accountService.updateNickname(account, nicknameForm.getNickname());
         redirectAttributes.addFlashAttribute("message", "닉네임을 수정했습니다.");
         return "redirect:" + SETTINGS_ACCOUNT_URL;
+    }
+
+    @GetMapping(SETTINGS_TAGS_URL)
+    public String updateTags(@CurrentUser Account account, Model model) {
+        model.addAttribute(account);
+        return SETTINGS_TAGS_VIEW_NAME;
     }
 }
