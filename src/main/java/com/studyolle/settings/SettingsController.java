@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Controller
@@ -138,6 +140,11 @@ public class SettingsController {
     @GetMapping(SETTINGS_TAGS_URL)
     public String updateTags(@CurrentUser Account account, Model model) {
         model.addAttribute(account);
+        List<String> tags = accountService.getTags(account)
+                .stream()
+                .map(Tag::getTitle)
+                .collect(Collectors.toList());
+        model.addAttribute("tags", tags);
         return SETTINGS_TAGS_VIEW_NAME;
     }
 

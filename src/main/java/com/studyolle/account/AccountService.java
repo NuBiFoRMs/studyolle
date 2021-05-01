@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Set;
 
 @RequiredArgsConstructor
 @Transactional
@@ -126,5 +127,9 @@ public class AccountService implements UserDetailsService {
 
     public void addTag(Account account, Tag tag) {
         accountRepository.findById(account.getId()).ifPresent(a -> a.getTags().add(tag));
+    }
+
+    public Set<Tag> getTags(Account account) {
+        return accountRepository.findById(account.getId()).orElseThrow().getTags();
     }
 }
