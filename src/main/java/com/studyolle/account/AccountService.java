@@ -132,4 +132,8 @@ public class AccountService implements UserDetailsService {
     public Set<Tag> getTags(Account account) {
         return accountRepository.findById(account.getId()).orElseThrow().getTags();
     }
+
+    public void removeTag(Account account, Tag tag) {
+        accountRepository.findById(account.getId()).ifPresent(a -> a.getTags().remove(tag));
+    }
 }
