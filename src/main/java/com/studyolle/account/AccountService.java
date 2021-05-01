@@ -2,6 +2,7 @@ package com.studyolle.account;
 
 import com.studyolle.account.form.SignUpForm;
 import com.studyolle.domain.Account;
+import com.studyolle.domain.Tag;
 import com.studyolle.settings.form.Notifications;
 import com.studyolle.settings.form.PasswordForm;
 import com.studyolle.settings.form.Profile;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Set;
 
 @RequiredArgsConstructor
 @Transactional
@@ -121,5 +123,17 @@ public class AccountService implements UserDetailsService {
         mailMessage.setSubject("스터디올래, 로그인 링크");
         mailMessage.setText("/login-by-email?token=" + account.getEmailCheckToken() + "&email=" + account.getEmail());
         javaMailSender.send(mailMessage);
+    }
+
+    public void addTag(Account account, Tag tag) {
+        accountRepository.findById(account.getId()).ifPresent(a -> a.getTags().add(tag));
+    }
+
+    public Set<Tag> getTags(Account account) {
+        return accountRepository.findById(account.getId()).orElseThrow().getTags();
+    }
+
+    public void removeTag(Account account, Tag tag) {
+        accountRepository.findById(account.getId()).ifPresent(a -> a.getTags().remove(tag));
     }
 }
