@@ -2,10 +2,13 @@ spring:
   profiles:
     active: local
   jpa:
+    hibernate:
+      ddl-auto: create-drop
     properties:
       hibernate:
         format_sql: true
         show_sql: true
+
 server:
   servlet:
     session:
@@ -14,3 +17,5 @@ server:
 logging:
   level:
     com.studyolle: debug
+    #    org.hibernate.SQL: debug
+    org.hibernate.type.descriptor.sql.BasicBinder: trace
