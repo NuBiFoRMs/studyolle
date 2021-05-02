@@ -6,8 +6,11 @@ import com.studyolle.account.AccountRepository;
 import com.studyolle.account.AccountService;
 import com.studyolle.domain.Account;
 import com.studyolle.domain.Tag;
+import com.studyolle.domain.Zone;
 import com.studyolle.settings.form.TagForm;
+import com.studyolle.settings.form.ZoneForm;
 import com.studyolle.tag.TagRepository;
+import com.studyolle.zone.ZoneRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -41,6 +44,9 @@ class SettingsControllerTest {
 
     @Autowired
     TagRepository tagRepository;
+
+    @Autowired
+    ZoneRepository zoneRepository;
 
     @Autowired
     PasswordEncoder passwordEncoder;
@@ -202,5 +208,29 @@ class SettingsControllerTest {
                 .andExpect(model().attributeExists("account"))
                 .andExpect(model().attributeExists("whitelist"))
                 .andExpect(model().attributeExists("zones"));
+    }
+
+    @DisplayName("지역 수정하기 - 입력값 정상")
+    @Test
+    @WithAccount("nickname")
+    void addZone() throws Exception {
+        Zone testZone = Zone.builder()
+                .city("test")
+                .localNameOfCity("테스트시")
+                .province("테스트주")
+                .build();
+        zoneRepository.save(testZone);
+
+        ZoneForm zoneForm = new ZoneForm();
+        zoneForm.setZoneName(testZone.toString());
+
+        mockMvc.perform(post(SettingsController.SETTINGS_TAGS_URL + "/add")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(zoneForm))
+                .with(csrf()))
+                .andExpect(status().isOk());
+
+        Zone zone = zoneRepository.findByCityAndProvince(testZone.getCity(), testZone.getProvince()).orElse(null);
+        assertTrue(accountRepository.findByNickname("nickname").getZones().contains(zone));
     }
 }
