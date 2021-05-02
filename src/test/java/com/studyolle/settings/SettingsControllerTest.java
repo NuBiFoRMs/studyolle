@@ -191,4 +191,16 @@ class SettingsControllerTest {
 
         assertFalse(nickname.getTags().contains(newTag));
     }
+
+    @DisplayName("지역 수정 폼")
+    @Test
+    @WithAccount("nickname")
+    void updateZonesForm() throws Exception {
+        mockMvc.perform(get(SettingsController.SETTINGS_ZONES_URL))
+                .andExpect(status().isOk())
+                .andExpect(view().name(SettingsController.SETTINGS_ZONES_VIEW_NAME))
+                .andExpect(model().attributeExists("account"))
+                .andExpect(model().attributeExists("whitelist"))
+                .andExpect(model().attributeExists("zones"));
+    }
 }
