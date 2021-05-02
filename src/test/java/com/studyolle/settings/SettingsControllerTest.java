@@ -1,16 +1,23 @@
 package com.studyolle.settings;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.studyolle.WithAccount;
 import com.studyolle.account.AccountRepository;
+import com.studyolle.account.AccountService;
 import com.studyolle.domain.Account;
+import com.studyolle.domain.Tag;
+import com.studyolle.settings.form.TagForm;
+import com.studyolle.tag.TagRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -18,6 +25,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+@Transactional
 @SpringBootTest
 @AutoConfigureMockMvc
 class SettingsControllerTest {
@@ -26,10 +34,19 @@ class SettingsControllerTest {
     MockMvc mockMvc;
 
     @Autowired
+    AccountService accountService;
+
+    @Autowired
     AccountRepository accountRepository;
 
     @Autowired
+    TagRepository tagRepository;
+
+    @Autowired
     PasswordEncoder passwordEncoder;
+
+    @Autowired
+    ObjectMapper objectMapper;
 
     @AfterEach
     void tearDown() {
@@ -42,6 +59,7 @@ class SettingsControllerTest {
     void updateProfileForm() throws Exception {
         mockMvc.perform(get(SettingsController.SETTINGS_PROFILE_URL))
                 .andExpect(status().isOk())
+                .andExpect(view().name(SettingsController.SETTINGS_PROFILE_VIEW_NAME))
                 .andExpect(model().attributeExists("account"))
                 .andExpect(model().attributeExists("profile"));
     }
@@ -86,11 +104,12 @@ class SettingsControllerTest {
     void updatePasswordForm() throws Exception {
         mockMvc.perform(get(SettingsController.SETTINGS_PASSWORD_URL))
                 .andExpect(status().isOk())
+                .andExpect(view().name(SettingsController.SETTINGS_PASSWORD_VIEW_NAME))
                 .andExpect(model().attributeExists("account"))
                 .andExpect(model().attributeExists("passwordForm"));
     }
 
-    @DisplayName("패스워 수정하기 - 입력값 정상")
+    @DisplayName("패스워드 수정하기 - 입력값 정상")
     @Test
     @WithAccount("nickname")
     void updatePassword() throws Exception {
@@ -106,7 +125,7 @@ class SettingsControllerTest {
         assertTrue(passwordEncoder.matches("12345678", account.getPassword()));
     }
 
-    @DisplayName("프로필 수정하기 - 입력값 오류")
+    @DisplayName("패스워드 수정하기 - 입력값 오류")
     @Test
     @WithAccount("nickname")
     void updatePassword_error() throws Exception {
@@ -119,5 +138,57 @@ class SettingsControllerTest {
                 .andExpect(model().attributeExists("account"))
                 .andExpect(model().attributeExists("passwordForm"))
                 .andExpect(model().hasErrors());
+    }
+
+    @DisplayName("태그 수정 폼")
+    @Test
+    @WithAccount("nickname")
+    void updateTagsForm() throws Exception {
+        mockMvc.perform(get(SettingsController.SETTINGS_TAGS_URL))
+                .andExpect(status().isOk())
+                .andExpect(view().name(SettingsController.SETTINGS_TAGS_VIEW_NAME))
+                .andExpect(model().attributeExists("account"))
+                .andExpect(model().attributeExists("whitelist"))
+                .andExpect(model().attributeExists("tags"));
+    }
+
+    @DisplayName("태그 수정하기 - 입력값 정상")
+    @Test
+    @WithAccount("nickname")
+    void addTag() throws Exception {
+        TagForm tagForm = new TagForm();
+        tagForm.setTagTitle("newTag");
+
+        mockMvc.perform(post(SettingsController.SETTINGS_TAGS_URL + "/add")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(tagForm))
+                .with(csrf()))
+                .andExpect(status().isOk());
+
+        Tag newTag = tagRepository.findByTitle("newTag").orElse(null);
+        assertNotNull(newTag);
+        assertTrue(accountRepository.findByNickname("nickname").getTags().contains(newTag));
+    }
+
+    @DisplayName("태그 삭제하기 - 입력값 정상")
+    @Test
+    @WithAccount("nickname")
+    void removeTag() throws Exception {
+        Account nickname = accountRepository.findByNickname("nickname");
+        Tag newTag = tagRepository.save(Tag.builder().title("newTag").build());
+        accountService.addTag(nickname, newTag);
+
+        assertTrue(nickname.getTags().contains(newTag));
+
+        TagForm tagForm = new TagForm();
+        tagForm.setTagTitle("newTag");
+
+        mockMvc.perform(post(SettingsController.SETTINGS_TAGS_URL + "/remove")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(tagForm))
+                .with(csrf()))
+                .andExpect(status().isOk());
+
+        assertFalse(nickname.getTags().contains(newTag));
     }
 }
