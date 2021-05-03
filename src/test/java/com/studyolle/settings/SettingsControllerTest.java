@@ -26,6 +26,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @Transactional
@@ -224,10 +225,11 @@ class SettingsControllerTest {
         ZoneForm zoneForm = new ZoneForm();
         zoneForm.setZoneName(testZone.toString());
 
-        mockMvc.perform(post(SettingsController.SETTINGS_TAGS_URL + "/add")
+        mockMvc.perform(post(SettingsController.SETTINGS_ZONES_URL + "/add")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(zoneForm))
                 .with(csrf()))
+                .andDo(print())
                 .andExpect(status().isOk());
 
         Zone zone = zoneRepository.findByCityAndProvince(testZone.getCity(), testZone.getProvince()).orElse(null);
