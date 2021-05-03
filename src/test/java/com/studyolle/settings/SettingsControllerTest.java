@@ -235,4 +235,31 @@ class SettingsControllerTest {
         Zone zone = zoneRepository.findByCityAndProvince(testZone.getCity(), testZone.getProvince()).orElse(null);
         assertTrue(accountRepository.findByNickname("nickname").getZones().contains(zone));
     }
+
+    @DisplayName("지역 삭제하기 - 입력값 정상")
+    @Test
+    @WithAccount("nickname")
+    void removeZone() throws Exception {
+        Account nickname = accountRepository.findByNickname("nickname");
+        Zone testZone = Zone.builder()
+                .city("test")
+                .localNameOfCity("테스트시")
+                .province("테스트주")
+                .build();
+        Zone newZone = zoneRepository.save(testZone);
+        accountService.addZone(nickname, newZone);
+
+        assertTrue(nickname.getZones().contains(newZone));
+
+        ZoneForm zoneForm = new ZoneForm();
+        zoneForm.setZoneName(testZone.toString());
+
+        mockMvc.perform(post(SettingsController.SETTINGS_ZONES_URL + "/remove")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(zoneForm))
+                .with(csrf()))
+                .andExpect(status().isOk());
+
+        assertFalse(nickname.getTags().contains(newZone));
+    }
 }
