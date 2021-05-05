@@ -1,6 +1,6 @@
 language: java
 cache:
   directories:
-  - .autoconf
-  - $HOME/.m2
-script: mvn clean package
+    - .autoconf
+    - $HOME/.m2
+script: mvn test
